@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Home</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+      <table class="table table-border table-hover table-condensed">
+        <tbody class="lift:ServerCrud.edit?form=POST" />
+      </table>
+
+      <h3><span class="lift:Loc.relateserver" /></h3>
+      <table class="table table-border table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th><span class="lift:Loc.service" /></th>
+            <th><span class="lift:Loc.datacenter" /></th>
+            <th><span class="lift:Loc.brandname" /></th>
+            <th><span class="lift:Loc.hostname" /></th>
+            <th><span class="lift:Loc.localip" /></th>
+            <th><span class="lift:Loc.runningflg" /></th>
+            <th><span class="lift:Loc.roll" /></th>
+            <th><span class="lift:Loc.tags" /></th>
+            <th colspan="2">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody class="lift:ServerCrud.relateServerList">
+          <tr>
+            <td><server:id /></td>
+            <td><server:service /></td>
+            <td><server:datacenter /></td>
+            <td><server:brandname /></td>
+            <td><server:hostname /></td>
+            <td><server:localipaddress /></td>
+            <td><server:runningflg /></td>
+            <td><server:roll /></td>
+            <td><server:tags /></td>
+            <td><server:detail /></td>
+            <td><server:edit /></td>
+          <tr>
+        </tbody>
+      </table>
+
+    </div>
+  </body>
+</html>
+

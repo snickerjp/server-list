@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Home</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+      <table class="table table-border table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th><span class="lift:Loc.service" /></th>
+            <th><span class="lift:Loc.datacenter" /></th>
+            <th><span class="lift:Loc.racknumber" /></th>
+            <th><span class="lift:Loc.assetnumber" /></th>
+            <th><span class="lift:Loc.brandname" /></th>
+            <th><span class="lift:Loc.hostname" /></th>
+            <th><span class="lift:Loc.localip" /></th>
+            <th><span class="lift:Loc.servertype" /></th>
+            <th><span class="lift:Loc.runningflg" /></th>
+            <th><span class="lift:Loc.roll" /></th>
+            <th><span class="lift:Loc.tags" /></th>
+            <th colspan="2">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody class="lift:ServerCrud.serverList">
+          <tr>
+            <td><server:id /></td>
+            <td><server:service /></td>
+            <td><server:datacenter /></td>
+            <td><server:racknumber /></td>
+            <td><nobr><server:assetnumber /></nobr></td>
+            <td><nobr><server:brandname /></nobr></td>
+            <td><nobr><server:hostname /></nobr></td>
+            <td><server:localipaddress /></td>
+            <td><server:servertype /></td>
+            <td><server:runningflg /></td>
+            <td><server:roll /></td>
+            <td><nobr><server:tags /></nobr></td>
+            <td><server:detail /></td>
+            <td><server:edit /></td>
+          <tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+
