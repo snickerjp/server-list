@@ -7,6 +7,7 @@ import code.model._
 import net.liftweb.util.SecurityHelpers
 import java.util.Date
 import net.liftweb.http.SHtml
+import net.liftweb.http.SHtml._
 import scala.xml.Text
 import net.liftweb.http.S
 import net.liftweb.mapper._
@@ -16,12 +17,14 @@ class ServerCrud {
   private object selectedServer extends RequestVar[Box[ServerData]](Empty)
 
   def serverList(xhtml : NodeSeq) : NodeSeq = {
-    val serverList = S.param("keyword") match {
-      case Full(key) => ServerData.findAll(BySql("concat(service, data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, roll, tags) like ?", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"))
+    val serverList = (S.param("service"), S.param("keyword")) match {
+      case (Full(ser), Full(key)) if ser != "" => ServerData.findAll(BySql("concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags) like ?", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"), By(ServerData.service, ser.toInt))
+      case (_, Full(key)) => ServerData.findAll(BySql("concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags) like ?", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"))
+      case (Full(ser), _) => ServerData.findAll(By(ServerData.service, ser.toInt))
       case _ => ServerData.findAll
     }
     (S.param("runningFlg") match {
-      case Full("1") => serverList.filter(_.runningFlg.get)
+      case Full("1") => serverList.filter(_.runningFlg.get == 1)
       case _ => serverList
     }).flatMap(generateServerHtmlLine(xhtml, _))
   }
@@ -37,18 +40,16 @@ class ServerCrud {
   def generateServerHtmlLine(xhtml : NodeSeq, sd : ServerData) : NodeSeq = {
     bind("server", xhtml,
       "id" -> sd.id.get,
-      "service" -> sd.service.foreign.openOr(ServiceData.create.name("none")).name.get,
+      "service" -> sd.service.asHtml,
       "datacenter" -> sd.dataCenter.get,
       "racknumber" -> sd.rackNumber.get,
       "assetnumber" -> sd.assetNumber.get,
       "brandname" -> sd.brandName.get,
       "operatingsystem" -> sd.operatingSystem.get,
       "hostname" -> sd.hostName.get,
-      "localipaddress" -> sd.localIpAddress.get,
-      "servertype" -> sd.serverType.get,
-      "roll" -> sd.roll.get,
-      "runningflg" -> (if (sd.runningFlg.get) <span class="label label-success">{S.?("running")}</span> else <span class="label label-default">{S.?("stop")}</span>),
-      "tags" -> (if (sd.tags.get == null) <blank /> else <taggroup>{sd.tags.get.split(",").flatMap(t => <span class="badge">{t.trim}</span>)}</taggroup>),
+      "localipaddress" -> sd.localIpAddress.asHtml,
+      "runningflg" -> sd.runningFlg.asHtml,
+      "tags" -> sd.tags.asHtml,
       "detail" -> SHtml.link("/detail", () => selectedServer(Full(sd)), Text(S.?("detail")), "class" -> "btn btn-info btn-xs"),
       "edit" -> SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info btn-xs")
     )
@@ -73,9 +74,19 @@ class ServerCrud {
   }
 
   def keywordSearchForm(xhtml : NodeSeq) : NodeSeq = {
+    def selectOption(s : ServiceData) : NodeSeq = S.param("service") match {
+      case Full(id) if id == s.id.get.toString => <option value={s.id.get.toString} selected="on">{s.name.get}</option>
+      case _ => <option value={s.id.get.toString}>{s.name.get}</option>    
+    }
+    val serviceOptions : NodeSeq = ServiceData.findAll.flatMap(s => selectOption(s))
+    val running : NodeSeq = S.param("runningFlg") match {
+        case Full("1") => <xmlGroup><input type="checkbox" name="runningFlg" value="1" checked="on" /><span>{S.?("runningonly")}</span></xmlGroup>
+        case _ => <xmlGroup><input type="checkbox" name="runningFlg" value="1" /><span>{S.?("runningonly")}</span></xmlGroup>
+    }
     bind("searchform", xhtml,
+      "service" -> <select name="service" class="form-control"><option value=""></option>{serviceOptions}</select>,
       "keyword" -> <input type="text" name="keyword" class="form-control" placeholder="Keyword Search" value={S.param("keyword").openOr("")} />,
-      "running" -> (if (S.param("runningFlg").openOr("") == "1") <input type="checkbox" name="runningFlg" value="1" checked="on" /><span>{S.?("runningonly")}</span> else <input type="checkbox" name="runningFlg" value="1" /><span>{S.?("runningonly")}</span>)
+      "running" -> {running}
     )
   }
 }

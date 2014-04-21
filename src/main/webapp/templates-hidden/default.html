@@ -26,10 +26,13 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <span data-lift="lift:Menu.builder?linkToSelf=true;li_item:class=active;ul:class=nav navbar-nav"></span>
           <form class="lift:ServerCrud.keywordSearchForm?form=POST;class=navbar-form;">
-              <div class="form-group">
+            <div class="form-group">
+              <searchform:service />
+            </div>
+            <div class="form-group">
               <searchform:keyword />
             </div>
-            <div class="checkbox">
+            <div class="checkbox-inline">
               <label><searchform:running /></label>
             </div>
             <button type="submit" class="btn btn-primary"><span class="lift:Loc.submit" /></button>
