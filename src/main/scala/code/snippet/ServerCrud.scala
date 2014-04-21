@@ -76,7 +76,7 @@ class ServerCrud {
   def keywordSearchForm(xhtml : NodeSeq) : NodeSeq = {
     def selectOption(s : ServiceData) : NodeSeq = S.param("service") match {
       case Full(id) if id == s.id.get.toString => <option value={s.id.get.toString} selected="on">{s.name.get}</option>
-      case _ => <option value={s.id.get.toString}>{s.name.get}</option>    
+      case _ => <option value={s.id.get.toString}>{s.name.get}</option>
     }
     val serviceOptions : NodeSeq = ServiceData.findAll.flatMap(s => selectOption(s))
     val running : NodeSeq = S.param("runningFlg") match {
@@ -90,4 +90,3 @@ class ServerCrud {
     )
   }
 }
-// vim: set ts=4 sw=4 et:

@@ -22,7 +22,7 @@ class ServiceCrud {
 
   def saveServiceData(service: ServiceData) : NodeSeq =  {
     service.validate match {
-      case Nil => service.save; S.redirectTo("/service", () => selectedService(Full(service)))
+      case Nil => service.save; S.redirectTo("/service", () => selectedService(Empty))
       case x => S.error(x); selectedService(Full(service)); <blank />
     }
   }
@@ -30,4 +30,3 @@ class ServiceCrud {
     selectedService.is.openOr(ServiceData.create).toForm(Full(S.?("add")), saveServiceData _)
   }
 }
-// vim: set ts=4 sw=4 et:
