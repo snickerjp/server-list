@@ -50,9 +50,23 @@ class ServerCrud {
       "localipaddress" -> sd.localIpAddress.asHtml,
       "runningflg" -> sd.runningFlg.asHtml,
       "tags" -> sd.tags.asHtml,
-      "detail" -> SHtml.link("/detail", () => selectedServer(Full(sd)), Text(S.?("detail")), "class" -> "btn btn-info btn-xs"),
+//      "detail" -> SHtml.link("/detail", () => selectedServer(Full(sd)), Text(S.?("detail")), "class" -> "btn btn-info btn-xs"),
+      "detail" -> detailModal(sd),
       "edit" -> SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info btn-xs")
     )
+  }
+  def detailModal(sd : ServerData) : NodeSeq = {
+    <button class="btn btn-primary btn-xs" data-toggle="modal" data-target={".sd" + sd.id.get}>{S.?("detail")}</button>
+    <div class={"modal fade sd" + sd.id.get} tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+      <table class="table table-border table-hover table-condensed">
+{sd.toHtml ++ <tr><td colspan="2" align="right">{SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info")}</td></tr>}
+      </table>
+
+        </div>
+      </div>
+    </div>
   }
   def saveServerData(server: ServerData) : NodeSeq =  {
     server.validate match {
