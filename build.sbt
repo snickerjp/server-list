@@ -1,6 +1,6 @@
-name := "Lift 2.6 starter template"
+name := "serverlist"
 
-version := "0.0.3"
+version := "0.1.0"
 
 organization := "net.liftweb"
 
@@ -31,4 +31,3 @@ libraryDependencies ++= {
     "mysql"             % "mysql-connector-java" % "5.1.18"          % "runtime"
   )
 }
-
