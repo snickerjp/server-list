@@ -52,25 +52,70 @@ class ServerCrud {
       "tags" -> sd.tags.asHtml,
 //      "detail" -> SHtml.link("/detail", () => selectedServer(Full(sd)), Text(S.?("detail")), "class" -> "btn btn-info btn-xs"),
       "detail" -> detailModal(sd),
-      "edit" -> SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info btn-xs")
+//      "edit" -> SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info btn-xs")
+      "edit" -> editModal(sd)
     )
   }
   def detailModal(sd : ServerData) : NodeSeq = {
-    <button class="btn btn-primary btn-xs" data-toggle="modal" data-target={".sd" + sd.id.get}>{S.?("detail")}</button>
-    <div class={"modal fade sd" + sd.id.get} tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <button class="btn btn-info btn-xs" data-toggle="modal" data-target={".sd-detail" + sd.id.get}>{S.?("detail")}</button>
+    <div class={"modal fade sd-detail" + sd.id.get} tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-      <table class="table table-border table-hover table-condensed">
-{sd.toHtml ++ <tr><td colspan="2" align="right">{SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info")}</td></tr>}
-      </table>
-
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{sd.hostName.get}</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-border table-hover table-condensed">
+              {sd.toHtml ++ <tr><td colspan="2" align="right"></td></tr>}
+            </table>
+            <h5>{S.?("relateserver")}</h5>
+            <table class="table table-border table-hover table-condensed">
+              <thead>
+                {ServerData.htmlHeaders}
+              </thead>
+              <tbody>
+                {(ServerData.findAll(By(ServerData.brandName, sd.hostName.get)) :::
+                  ServerData.findAll(By(ServerData.hostName, sd.brandName.get)))
+                  .flatMap(d => d.htmlLine)}
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  def editModal(sd : ServerData) : NodeSeq = {
+    <button class="btn btn-info btn-xs" data-toggle="modal" data-target={".sd-edit" + sd.id.get}>{S.?("edit")}</button>
+    <div class={"modal fade sd-edit" + sd.id.get} tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form method="post" action="/index">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{sd.hostName.get}</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-border table-hover table-condensed">
+                {sd.toForm(Empty, saveServerData _)}
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">{S.?("edit")}</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   }
   def saveServerData(server: ServerData) : NodeSeq =  {
-    server.validate match {
-      case Nil => server.save; S.redirectTo("/detail", () => selectedServer(Full(server)))
+      server.validate match {
+//      case Nil => server.save; S.redirectTo("/detail", () => selectedServer(Full(server)))
+      case Nil => server.save; S.redirectTo("/index", () => ())
       case x => S.error(x); selectedServer(Full(server)); <blank />
     }
   }
@@ -86,7 +131,6 @@ class ServerCrud {
       case _ => S.redirectTo("/index", () => ())
     }
   }
-
   def keywordSearchForm(xhtml : NodeSeq) : NodeSeq = {
     def selectOption(s : ServiceData) : NodeSeq = S.param("service") match {
       case Full(id) if id == s.id.get.toString => <option value={s.id.get.toString} selected="on">{s.name.get}</option>
