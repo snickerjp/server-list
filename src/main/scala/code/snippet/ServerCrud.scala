@@ -77,7 +77,7 @@ class ServerCrud {
               <tbody>
                 {(ServerData.findAll(By(ServerData.brandName, sd.hostName.get)) :::
                   ServerData.findAll(By(ServerData.hostName, sd.brandName.get)))
-                  .flatMap(d => d.htmlLine)}
+                  .flatMap(d => <tr>{d.htmlLine}</tr>)}
               </tbody>
             </table>
           </div>
