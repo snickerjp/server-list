@@ -95,12 +95,13 @@ class ServerData extends LongKeyedMapper[ServerData] {
   object description extends MappedTextarea(this, 1024) {
     override def textareaRows  = 5
     override def textareaCols = 50
-    override def displayName = S.?("discription")
+    override def displayName = S.?("description")
+    override def dbDisplay_? = false
   }
   object tags extends MappedString(this, 255) {
     override def displayName = S.?("tags")
     override def asHtml = {
-      if (this.get == null) <blank /> else <taggroup>{this.get.split(",").flatMap(t => <span class="badge">{t.trim}</span>)}</taggroup>
+      if (this.get == null) <blank /> else <taggroup>{this.get.split(",").flatMap(t => <span class="badge">{t.trim}</span><span>&nbsp;</span>)}</taggroup>
     }
   }
 
