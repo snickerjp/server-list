@@ -25,8 +25,8 @@
           <a class="navbar-brand" href="/index">ServerList</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <span data-lift="lift:Menu.builder?linkToSelf=true;li_item:class=active;ul:class=nav+navbar-nav"></span>
-          <form class="lift:ServerCrud.keywordSearchForm?form=POST;class=navbar-form;">
+<!--          <span data-lift="lift:Menu.builder?linkToSelf=true;li_item:class=active;ul:class=nav+navbar-nav"></span> -->
+          <form class="lift:ServerCrud.keywordSearchForm?form=POST;class=navbar-form+navbar-left;">
             <div class="form-group">
               <searchform:service />
             </div>
@@ -37,14 +37,63 @@
               <label><searchform:running /></label>
             </div>
             <button type="submit" class="btn btn-primary"><span class="lift:Loc.submit" /></button>
-
           </form>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a herf="#" data-toggle="modal" data-target=".sd-add"><span class="glyphicon glyphicon-plus" /></a></li>
+            <li><a herf="#" data-toggle="modal" data-target=".config"><span class="glyphicon glyphicon-cog" /></a></li>
+          </ul>
+
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
     <div class="container-fluid">
       <div id="content">The main content will get bound here</div>
     </div>
+
+    <!-- nav menu modal area -->
+    <div class="modal fade sd-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel"><span class="lift:Loc.add" /></h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-border table-hover table-condensed">
+              <tbody class="lift:ServerCrud.add?form=POST" />
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <!--                    <button type="button" class="btn btn-primary">Save changes</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade config" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel"><span class="lift:Loc.config" /></h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-border table-hover table-condensed">
+              <tbody class="lift:ServiceCrud.add?form=POST" />
+            </table>
+            <table class="table table-border table-hover table-condensed">
+              <tbody class="lift:ServiceCrud.serviceList">
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / nav menu modal area -->
+
     <hr />
     <div class="fotter" style="text-align: center">
       <h4 class="alt">

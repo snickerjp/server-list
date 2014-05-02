@@ -22,7 +22,8 @@ class ServiceCrud {
 
   def saveServiceData(service: ServiceData) : NodeSeq =  {
     service.validate match {
-      case Nil => service.save; S.redirectTo("/service", () => selectedService(Empty))
+//      case Nil => service.save; S.redirectTo("/service", () => selectedService(Empty))
+      case Nil => service.save; S.redirectTo("/index", () => selectedService(Empty))
       case x => S.error(x); selectedService(Full(service)); <blank />
     }
   }
