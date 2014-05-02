@@ -72,12 +72,33 @@ class ServerCrud {
             <h5>{S.?("relateserver")}</h5>
             <table class="table table-border table-hover table-condensed">
               <thead>
-                {ServerData.htmlHeaders}
+                <tr>
+                  <th>{ServerData.dataCenter.displayName}</th>
+                  <th>{ServerData.rackNumber.displayName}</th>
+                  <th>{ServerData.assetNumber.displayName}</th>
+                  <th>{ServerData.brandName.displayName}</th>
+                  <th>{ServerData.operatingSystem.displayName}</th>
+                  <th>{ServerData.hostName.displayName}</th>
+                  <th>{ServerData.localIpAddress.displayName}</th>
+                  <th>{ServerData.runningFlg.displayName}</th>
+                  <th>{ServerData.tags.displayName}</th>
+                </tr>
               </thead>
               <tbody>
                 {(ServerData.findAll(By(ServerData.brandName, sd.hostName.get)) :::
                   ServerData.findAll(By(ServerData.hostName, sd.brandName.get)))
-                  .flatMap(d => <tr>{d.htmlLine}</tr>)}
+                  .flatMap(d =>
+                    <tr>
+                      <td>{d.dataCenter.asHtml}</td>
+                      <td>{d.rackNumber.asHtml}</td>
+                      <td>{d.assetNumber.asHtml}</td>
+                      <td>{d.brandName.asHtml}</td>
+                      <td>{d.operatingSystem.asHtml}</td>
+                      <td>{d.hostName.asHtml}</td>
+                      <td>{d.localIpAddress.asHtml}</td>
+                      <td>{d.runningFlg.asHtml}</td>
+                      <td>{d.tags.asHtml}</td>
+                    </tr>)}
               </tbody>
             </table>
           </div>
