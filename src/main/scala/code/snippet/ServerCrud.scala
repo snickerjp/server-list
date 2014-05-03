@@ -53,7 +53,8 @@ class ServerCrud {
 //      "detail" -> SHtml.link("/detail", () => selectedServer(Full(sd)), Text(S.?("detail")), "class" -> "btn btn-info btn-xs"),
       "detail" -> detailModal(sd),
 //      "edit" -> SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info btn-xs")
-      "edit" -> editModal(sd)
+      "edit" -> editModal(sd),
+      "delete" -> deleteModal(sd)
     )
   }
   def detailModal(sd : ServerData) : NodeSeq = {
@@ -67,7 +68,7 @@ class ServerCrud {
           </div>
           <div class="modal-body">
             <table class="table table-border table-hover table-condensed">
-              {sd.toHtml ++ <tr><td colspan="2" align="right"></td></tr>}
+              {sd.toHtml}
             </table>
             <h5>{S.?("relateserver")}</h5>
             <table class="table table-border table-hover table-condensed">
@@ -133,11 +134,44 @@ class ServerCrud {
       </div>
     </div>
   }
+
+  def deleteModal(sd : ServerData) : NodeSeq = {
+    <button class="btn btn-danger btn-xs" data-toggle="modal" data-target={".sd-delete" + sd.id.get}>{S.?("delete")}</button>
+    <div class={"modal fade sd-delete" + sd.id.get} tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{sd.hostName.get}</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-border table-hover table-condensed">
+              {sd.toHtml}
+            </table>
+            <form method="post" action="/index">
+              <input type="text" name="hostName" value="" placeholder="Please enter the host name for confirmation."/>
+              {SHtml.submit(S.?("delete"), () => deleteServerData(sd), "class" -> "btn btn-danger")}
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
   def saveServerData(server: ServerData) : NodeSeq =  {
       server.validate match {
 //      case Nil => server.save; S.redirectTo("/detail", () => selectedServer(Full(server)))
       case Nil => server.save; S.redirectTo("/index", () => ())
       case x => S.error(x); selectedServer(Full(server)); <blank />
+    }
+  }
+  def deleteServerData(sd: ServerData) : NodeSeq = {
+    S.param("hostName") match {
+      case Full(host) if host == sd.hostName.get => sd.delete_!; S.redirectTo("/index", () => ())
+      case _ => S.error(""); S.redirectTo("/index", () => ())
     }
   }
   def add(): NodeSeq = {
