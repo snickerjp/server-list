@@ -14,7 +14,7 @@ import net.liftweb.mapper._
 import net.liftweb.util.Helpers._
 
 class ServerCrud {
-  private object selectedServer extends RequestVar[Box[ServerData]](Empty)
+/*  private object selectedServer extends RequestVar[Box[ServerData]](Empty)*/
 
   def serverList(xhtml : NodeSeq) : NodeSeq = {
     val serverList = (S.param("service"), S.param("keyword")) match {
@@ -29,13 +29,13 @@ class ServerCrud {
     }).flatMap(generateServerHtmlLine(xhtml, _))
   }
 
-  def relateServerList(xhtml : NodeSeq) : NodeSeq = {
+/*  def relateServerList(xhtml : NodeSeq) : NodeSeq = {
     (selectedServer.is match {
       case Full(sd) => ServerData.findAll(By(ServerData.brandName, sd.hostName.get)) :::
         ServerData.findAll(By(ServerData.hostName, sd.brandName.get))
       case _ => S.redirectTo("/index", () => ())
     }).flatMap(generateServerHtmlLine(xhtml, _))
-  }
+  }*/
 
   def generateServerHtmlLine(xhtml : NodeSeq, sd : ServerData) : NodeSeq = {
     bind("server", xhtml,
@@ -50,9 +50,7 @@ class ServerCrud {
       "localipaddress" -> sd.localIpAddress.asHtml,
       "runningflg" -> sd.runningFlg.asHtml,
       "tags" -> sd.tags.asHtml,
-//      "detail" -> SHtml.link("/detail", () => selectedServer(Full(sd)), Text(S.?("detail")), "class" -> "btn btn-info btn-xs"),
       "detail" -> detailModal(sd),
-//      "edit" -> SHtml.link("/edit", () => selectedServer(Full(sd)), Text(S.?("edit")), "class" -> "btn btn-info btn-xs")
       "edit" -> editModal(sd),
       "delete" -> deleteModal(sd)
     )
@@ -162,30 +160,35 @@ class ServerCrud {
   }
 
   def saveServerData(server: ServerData) : NodeSeq =  {
-      server.validate match {
-//      case Nil => server.save; S.redirectTo("/detail", () => selectedServer(Full(server)))
-      case Nil => server.save; S.redirectTo("/index", () => ())
-      case x => S.error(x); selectedServer(Full(server)); <blank />
+    server.validate match {
+      case Nil => {
+        server.save
+        S.notice(<span>{S.?("savecompleted")}</span>)
+        S.redirectTo("/index", () => ())
+      }
+      case x => S.error(x); S.redirectTo("/index", () => ())
     }
   }
   def deleteServerData(sd: ServerData) : NodeSeq = {
     S.param("hostName") match {
       case Full(host) if host == sd.hostName.get => sd.delete_!; S.redirectTo("/index", () => ())
-      case _ => S.error(""); S.redirectTo("/index", () => ())
+      case _ => S.warning(<span>{S.?("unmatched")}</span>); S.redirectTo("/index", () => ())
     }
   }
   def add(): NodeSeq = {
-    selectedServer.is.openOr(ServerData.create).toForm(Full(S.?("add")), saveServerData _)
+    ServerData.create.toForm(Full(S.?("add")), saveServerData _)
   }
-  def edit(): NodeSeq = {
-    selectedServer.is.openOr(ServerData.create).toForm(Full(S.?("edit")), saveServerData _)
-  }
-  def detail() : NodeSeq = {
+/*  def edit(): NodeSeq = {
+    selectedServer.is match {
+      case Full(server) => server.toForm(Full(S.?("edit")), saveServerData _)
+      case _ => S.error(S.?("unknown"); S.redirectTo("/index", () => ())
+  }*/
+/*  def detail() : NodeSeq = {
     selectedServer.is match {
       case Full(server) => server.toHtml ++ <tr><td colspan="2" align="right">{SHtml.link("/edit", () => selectedServer(Full(server)), Text(S.?("edit")), "class" -> "btn btn-info")}</td></tr>
-      case _ => S.redirectTo("/index", () => ())
+      case _ => S.error(S.?("unknown"); S.redirectTo("/index", () => ())
     }
-  }
+  }*/
   def keywordSearchForm(xhtml : NodeSeq) : NodeSeq = {
     def selectOption(s : ServiceData) : NodeSeq = S.param("service") match {
       case Full(id) if id == s.id.get.toString => <option value={s.id.get.toString} selected="on">{s.name.get}</option>

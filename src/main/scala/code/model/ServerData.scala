@@ -24,7 +24,6 @@ class ServerData extends LongKeyedMapper[ServerData] {
   object service extends MappedLongForeignKey(this, ServiceData) {
     override def displayName = S.?("service")
     override def _toForm = {
-      // ServiceList.findAll.map(s => SelecteableOption(s.id.get, s.name.get))
       Full(
         SHtml.select(
           ServiceData.findAll.map(s => SelectableOption(s.id.get.toString, s.name.get)),

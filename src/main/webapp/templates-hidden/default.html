@@ -47,6 +47,17 @@
       </div><!-- /.container-fluid -->
     </nav>
     <div class="container-fluid">
+      <div class="lift:msgs?showAll=true;">
+        <lift:error_msg>
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <lift:Loc.error />
+        </lift:error_msg>
+        <lift:error_class>alert alert-danger</lift:error_class>
+        <lift:warning_msg><lift:Loc.warning /></lift:warning_msg>
+        <lift:warning_class>alert alert-warning</lift:warning_class>
+        <lift:notice_msg><lift:Loc.success /></lift:notice_msg>
+        <lift:notice_class>alert alert-success</lift:notice_class>
+      </div>
       <div id="content">The main content will get bound here</div>
     </div>
 
