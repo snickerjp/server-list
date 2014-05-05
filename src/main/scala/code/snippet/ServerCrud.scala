@@ -68,7 +68,7 @@ class ServerCrud {
             <table class="table table-border table-hover table-condensed">
               {sd.toHtml}
             </table>
-            <h5>{S.?("relateserver")}</h5>
+            <h4>{S.?("relateserver")}</h4>
             <table class="table table-border table-hover table-condensed">
               <thead>
                 <tr>
@@ -102,7 +102,7 @@ class ServerCrud {
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{S.?("close")}</button>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ class ServerCrud {
               </table>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">{S.?("close")}</button>
               <button type="submit" class="btn btn-primary">{S.?("edit")}</button>
             </div>
           </form>
@@ -142,18 +142,21 @@ class ServerCrud {
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">{sd.hostName.get}</h4>
           </div>
-          <div class="modal-body">
-            <table class="table table-border table-hover table-condensed">
-              {sd.toHtml}
-            </table>
-            <form method="post" action="/index">
-              <input type="text" name="hostName" value="" placeholder="Please enter the host name for confirmation."/>
+          <form method="post" action="/index" role="form">
+            <div class="modal-body">
+              <table class="table table-border table-hover table-condensed">
+                {sd.toHtml}
+              </table>
+              <div class="form-group">
+                <label for={"sd-delete" + sd.id.get + "-hostName"}>{S.?("deleteconfirm")}</label>
+                <input type="text" id={"sd-delete" + sd.id.get + "-hostName"} name="hostName" value="" class="form-control" placeholder={sd.hostName.displayName}/>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">{S.?("close")}</button>
               {SHtml.submit(S.?("delete"), () => deleteServerData(sd), "class" -> "btn btn-danger")}
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -175,8 +178,13 @@ class ServerCrud {
       case _ => S.warning(<span>{S.?("unmatched")}</span>); S.redirectTo("/index", () => ())
     }
   }
-  def add(): NodeSeq = {
-    ServerData.create.toForm(Full(S.?("add")), saveServerData _)
+  def add(xhtml: NodeSeq): NodeSeq = {
+    bind("server", xhtml,
+      "form" -> <table class="table table-border table-hover table-condensed">
+                  {ServerData.create.toForm(Empty, saveServerData _)}
+                </table>,
+      "submit" -> {SHtml.submit(S.?("add"), () => (), "class" -> "btn btn-primary")}
+    )
   }
 /*  def edit(): NodeSeq = {
     selectedServer.is match {
