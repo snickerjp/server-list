@@ -120,7 +120,7 @@ class ServerCrud {
             </div>
             <div class="modal-body">
               <table class="table table-border table-hover table-condensed">
-                {sd.toForm(Empty, saveServerData _)}
+                {sd.toForm(Empty, "/index")}
               </table>
             </div>
             <div class="modal-footer">
@@ -181,7 +181,7 @@ class ServerCrud {
   def add(xhtml: NodeSeq): NodeSeq = {
     bind("server", xhtml,
       "form" -> <table class="table table-border table-hover table-condensed">
-                  {ServerData.create.toForm(Empty, saveServerData _)}
+                  {ServerData.create.toForm(Empty, "/index")}
                 </table>,
       "submit" -> {SHtml.submit(S.?("add"), () => (), "class" -> "btn btn-primary")}
     )
