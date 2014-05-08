@@ -51,10 +51,11 @@ class Boot {
 //      Menu(<span class="btn btn-default glyphicon glyphicon-list" />) / "index",
 //      Menu(<span class="btn btn-default glyphicon glyphicon-plus" />) / "add",
       Menu.i("list") / "index",
-      Menu.i("add") / "add",
+/*      Menu.i("add") / "add",
       Menu.i("detail") / "detail" >> Hidden,
       Menu.i("edit") / "edit" >> Hidden,
-      Menu.i("service") / "service"
+      Menu.i("service") / "service"*/
+      Menu.i("config") / "config"
       )
 
 //    def sitemapMutators = User.sitemapMutator
