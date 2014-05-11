@@ -16,7 +16,7 @@ class ServiceCrud {
   private object selectedService extends RequestVar[Box[ServiceData]](Empty)
 
   def serviceList(xhtml : NodeSeq) : NodeSeq = {
-    ServiceData.findAll.flatMap(s => generateServiceHtmlLine(xhtml, s))
+    ServiceData.findAll(OrderBy(ServiceData.id, Ascending)).flatMap(s => generateServiceHtmlLine(xhtml, s))
   }
 
   def generateServiceHtmlLine(xhtml : NodeSeq, sd : ServiceData) : NodeSeq = {
@@ -27,8 +27,33 @@ class ServiceCrud {
         <span style={style}>{sd.name.get}</span>
       },
       "runningflg" -> sd.runningFlg.asHtml,
-      "edit" -> <blank />//editModal(sd)
+      "edit" -> editModal(sd)
     )
+  }
+
+  def editModal(sd : ServiceData) : NodeSeq = {
+    <button class="btn btn-info btn-xs" data-toggle="modal" data-target={".sd-edit" + sd.id.get}>{S.?("edit")}</button>
+    <div class={"modal fade sd-edit" + sd.id.get} tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form method="post" action="/config">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{sd.name.get}</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-border table-hover table-condensed">
+                {sd.toForm(Empty, "/config")}
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">{S.?("close")}</button>
+              <button type="submit" class="btn btn-primary">{S.?("edit")}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   }
 
   def add(): NodeSeq = {

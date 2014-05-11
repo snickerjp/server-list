@@ -25,7 +25,7 @@ class ServiceData extends LongKeyedMapper[ServiceData] {
     override def displayName = S.?("service")
   }
   object colorCode extends MappedString(this, 6) {
-    override def displayName = S.?("colorCode")
+    override def displayName = S.?("colorcode")
   }
   object runningFlg extends MappedInt(this) {
     override def displayName = S.?("runningflg")
