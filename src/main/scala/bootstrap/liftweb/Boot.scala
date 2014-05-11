@@ -38,32 +38,19 @@ class Boot {
     MapperRules.columnName = (_,name) => Helpers.snakify(name)
     MapperRules.tableName = (_,name) => Helpers.snakify(name)
 
-    // Use Lift's Mapper ORM to populate the database
-    // you don't need to use Mapper to use Lift... use
-    // any ORM you want
-//    Schemifier.schemify(true, Schemifier.infoF _, User, ServerData, ServiceData)
+    // テーブルの更新
+    Schemifier.schemify(true, Schemifier.infoF _, ServerData, ServiceData)
 
     // where to search snippet
     LiftRules.addToPackages("code")
 
     // Build SiteMap
     def sitemap = SiteMap(
-//      Menu(<span class="btn btn-default glyphicon glyphicon-list" />) / "index",
-//      Menu(<span class="btn btn-default glyphicon glyphicon-plus" />) / "add",
-      Menu.i("list") / "index",
-/*      Menu.i("add") / "add",
-      Menu.i("detail") / "detail" >> Hidden,
-      Menu.i("edit") / "edit" >> Hidden,
-      Menu.i("service") / "service"*/
-      Menu.i("config") / "config"
-      )
+      Menu.i("list") / "index" >> Hidden,
+      Menu.i("config") / "config" >> Hidden,
+      Menu(Loc("static", List("static") -> true, "", Hidden))
+    )
 
-//    def sitemapMutators = User.sitemapMutator
-
-    // set the sitemap.  Note if you don't want access control for
-    // each page, just comment this line out.
-// ユーザ登録はいらん
-//    LiftRules.setSiteMapFunc(() => sitemapMutators(sitemap))
     LiftRules.setSiteMapFunc(() => sitemap)
 
     //Init the jQuery module, see http://liftweb.net/jquery for more information.
@@ -89,7 +76,8 @@ class Boot {
     // Force the request to be UTF-8
     LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
     // What is the function to test if a user is logged in?
-    LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+//    LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+    LiftRules.loggedInTest = Empty
 
     // Use HTML5 for rendering
     LiftRules.htmlProperties.default.set((r: Req) =>
@@ -97,10 +85,5 @@ class Boot {
 
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)
-
-    // Use Lift's Mapper ORM to populate the database
-    // you don't need to use Mapper to use Lift... use
-    // any ORM you want
-    Schemifier.schemify(true, Schemifier.infoF _, User, ServerData, ServiceData)
   }
 }

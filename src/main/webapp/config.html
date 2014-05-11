@@ -11,7 +11,21 @@
       </table>
 
       <table class="table table-border table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th><span class="lift:Loc.service" /></th>
+            <th><span class="lift:Loc.runningflg" /></th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
         <tbody class="lift:ServiceCrud.serviceList">
+          <tr>
+            <td><service:id /></td>
+            <td><service:service /></td>
+            <td><service:runningflg /></td>
+            <td><service:edit /></td>
+          </tr>
         </tbody>
       </table>
 

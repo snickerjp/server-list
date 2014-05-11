@@ -14,7 +14,6 @@ import net.liftweb.mapper._
 import net.liftweb.util.Helpers._
 
 class ServerCrud {
-/*  private object selectedServer extends RequestVar[Box[ServerData]](Empty)*/
 
   def serverList(xhtml : NodeSeq) : NodeSeq = {
     val serverList = (S.param("service"), S.param("keyword")) match {
@@ -28,14 +27,6 @@ class ServerCrud {
       case _ => serverList
     }).flatMap(generateServerHtmlLine(xhtml, _))
   }
-
-/*  def relateServerList(xhtml : NodeSeq) : NodeSeq = {
-    (selectedServer.is match {
-      case Full(sd) => ServerData.findAll(By(ServerData.brandName, sd.hostName.get)) :::
-        ServerData.findAll(By(ServerData.hostName, sd.brandName.get))
-      case _ => S.redirectTo("/index", () => ())
-    }).flatMap(generateServerHtmlLine(xhtml, _))
-  }*/
 
   def generateServerHtmlLine(xhtml : NodeSeq, sd : ServerData) : NodeSeq = {
     bind("server", xhtml,
@@ -186,17 +177,6 @@ class ServerCrud {
       "submit" -> {SHtml.submit(S.?("add"), () => (), "class" -> "btn btn-primary")}
     )
   }
-/*  def edit(): NodeSeq = {
-    selectedServer.is match {
-      case Full(server) => server.toForm(Full(S.?("edit")), saveServerData _)
-      case _ => S.error(S.?("unknown"); S.redirectTo("/index", () => ())
-  }*/
-/*  def detail() : NodeSeq = {
-    selectedServer.is match {
-      case Full(server) => server.toHtml ++ <tr><td colspan="2" align="right">{SHtml.link("/edit", () => selectedServer(Full(server)), Text(S.?("edit")), "class" -> "btn btn-info")}</td></tr>
-      case _ => S.error(S.?("unknown"); S.redirectTo("/index", () => ())
-    }
-  }*/
   def keywordSearchForm(xhtml : NodeSeq) : NodeSeq = {
     def selectOption(s : ServiceData) : NodeSeq = S.param("service") match {
       case Full(id) if id == s.id.get.toString => <option value={s.id.get.toString} selected="on">{s.name.get}</option>
