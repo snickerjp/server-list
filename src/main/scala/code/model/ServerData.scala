@@ -95,7 +95,6 @@ class ServerData extends LongKeyedMapper[ServerData] {
     override def textareaRows  = 5
     override def textareaCols = 50
     override def displayName = S.?("description")
-    override def shouldDisplay_? = false
   }
   object tags extends MappedString(this, 255) {
     override def displayName = S.?("tags")
