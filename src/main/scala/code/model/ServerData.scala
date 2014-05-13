@@ -7,6 +7,7 @@ import net.liftweb.common._
 import net.liftweb.http.SHtml
 import net.liftweb.http.SHtml._
 import net.liftweb.http.S
+import scala.xml.XML
 
 /**
  * The singleton that has methods for accessing the database
@@ -95,6 +96,9 @@ class ServerData extends LongKeyedMapper[ServerData] {
     override def textareaRows  = 5
     override def textareaCols = 50
     override def displayName = S.?("description")
+    override def asHtml = {
+      XML.loadString("<span>" + this.get.replaceAll("\n", "<br />") + "</span>")
+    }
   }
   object tags extends MappedString(this, 255) {
     override def displayName = S.?("tags")
