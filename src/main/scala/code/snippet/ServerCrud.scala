@@ -17,8 +17,8 @@ class ServerCrud {
 
   def serverList(xhtml : NodeSeq) : NodeSeq = {
     val serverList = (S.param("service"), S.param("keyword")) match {
-      case (Full(ser), Full(key)) if ser != "" => ServerData.findAll(BySql("concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags) like ?", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"), By(ServerData.service, ser.toInt))
-      case (_, Full(key)) => ServerData.findAll(BySql("concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags) like ?", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"))
+      case (Full(ser), Full(key)) if ser != "" => ServerData.findAll(BySql("lower(concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags)) like lower(?)", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"), By(ServerData.service, ser.toInt))
+      case (_, Full(key)) => ServerData.findAll(BySql("lower(concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags)) like lower(?)", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"))
       case (Full(ser), _) => ServerData.findAll(By(ServerData.service, ser.toInt))
       case _ => ServerData.findAll
     }
