@@ -13,7 +13,7 @@ import scala.xml.XML
  * The singleton that has methods for accessing the database
  */
 object ServerData extends ServerData with LongKeyedMetaMapper[ServerData] {
-  override def fieldOrder = List(id, service, dataCenter, rackNumber, assetNumber, brandName, operatingSystem, hostName, localIpAddress, runningFlg, description, tags)
+  override def fieldOrder = List(id, service, dataCenter, rackNumber, assetNumber, brandName, operatingSystem, hostName, localIpAddress, runningFlg, warrantyPeriod, lastBackupDate, description, tags)
 }
 
 class ServerData extends LongKeyedMapper[ServerData] {
@@ -91,6 +91,13 @@ class ServerData extends LongKeyedMapper[ServerData] {
         case a => <span class={a(0)._3}>{a(0)._2}</span>
       }
     }
+  }
+
+  object warrantyPeriod extends MappedDate(this) {
+    override def displayName = S.?("warrantyperiod")
+  }
+  object lastBackupDate extends MappedDate(this) {
+    override def displayName = S.?("lastbackupdate")
   }
   object description extends MappedTextarea(this, 1024) {
     override def textareaRows  = 5
