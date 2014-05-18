@@ -95,9 +95,11 @@ class ServerData extends LongKeyedMapper[ServerData] {
 
   object warrantyPeriod extends MappedDate(this) {
     override def displayName = S.?("warrantyperiod")
+    override def asHtml = if (this.get == null) <blank /> else super.asHtml
   }
   object lastBackupDate extends MappedDate(this) {
     override def displayName = S.?("lastbackupdate")
+    override def asHtml = if (this.get == null) <blank /> else super.asHtml
   }
   object description extends MappedTextarea(this, 1024) {
     override def textareaRows  = 5
