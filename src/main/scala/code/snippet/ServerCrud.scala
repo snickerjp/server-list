@@ -16,16 +16,27 @@ import net.liftweb.util.Helpers._
 class ServerCrud {
 
   def serverList(xhtml : NodeSeq) : NodeSeq = {
-    val serverList = (S.param("service"), S.param("keyword")) match {
-      case (Full(ser), Full(key)) if ser != "" => ServerData.findAll(BySql("lower(concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags)) like lower(?)", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"), By(ServerData.service, ser.toInt))
-      case (_, Full(key)) => ServerData.findAll(BySql("lower(concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags)) like lower(?)", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%"))
-      case (Full(ser), _) => ServerData.findAll(By(ServerData.service, ser.toInt))
+    runningFilter(serviceFilter(keywordSearchList)).flatMap(generateServerHtmlLine(xhtml, _))
+  }
+  def keywordSearchList() : List[ServerData] = {
+    S.param("keyword") match {
+      case Full(key) => ServerData.findAll(
+        BySql("lower(concat(data_center, rack_number, asset_number, brand_name, operating_system, host_name, local_ip_address, tags)) like lower(?)", IHaveValidatedThisSQL("dchenbecker", "2008-12-03"), "%" + key + "%")
+      )
       case _ => ServerData.findAll
     }
-    (S.param("runningFlg") match {
+  }
+  def serviceFilter(serverList: List[ServerData]) : List[ServerData] = {
+    S.param("service") match {
+      case Full(ser) if ser != "" => serverList.filter(_.service.get.toString == ser)
+      case _ => serverList
+    }
+  }
+  def runningFilter(serverList: List[ServerData]) : List[ServerData] = {
+    S.param("runningFlg") match {
       case Full("1") => serverList.filter(_.runningFlg.get == 1)
       case _ => serverList
-    }).flatMap(generateServerHtmlLine(xhtml, _))
+    }
   }
 
   def generateServerHtmlLine(xhtml : NodeSeq, sd : ServerData) : NodeSeq = {
