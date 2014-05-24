@@ -12,8 +12,16 @@
       body { padding-top: 70px; }
     </style>
     <link rel="stylesheet" href="/classpath/css/bootstrap-theme.min.css">
-    <script src="classpath/js/jquery.min.js"></script>
+    <script src="/classpath/js/jquery.min.js"></script>
     <script src="/classpath/js/bootstrap.min.js"></script>
+    <script src="/classpath/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function()
+      {
+        $("#sortable").tablesorter();
+      }
+    );
+    </script>
   </head>
   <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
