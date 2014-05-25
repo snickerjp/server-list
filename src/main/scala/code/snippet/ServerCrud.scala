@@ -67,11 +67,11 @@ class ServerCrud {
             <h4 class="modal-title">{sd.hostName.get}</h4>
           </div>
           <div class="modal-body">
-            <table class="table table-border table-hover table-condensed">
+            <table class="table table-hover table-condensed">
               {sd.toHtml}
             </table>
             <h4>{S.?("relateserver")}</h4>
-            <table class="table table-border table-hover table-condensed">
+            <table class="table table-bordered table-hover table-condensed">
               <thead>
                 <tr>
                   <th>{ServerData.dataCenter.displayName}</th>
@@ -121,7 +121,7 @@ class ServerCrud {
               <h4 class="modal-title">{sd.hostName.get}</h4>
             </div>
             <div class="modal-body">
-              <table class="table table-border table-hover table-condensed">
+              <table class="table table-hover table-condensed">
                 {sd.toForm(Empty, "/index")}
               </table>
             </div>
@@ -146,7 +146,7 @@ class ServerCrud {
           </div>
           <form method="post" action="/index" role="form">
             <div class="modal-body">
-              <table class="table table-border table-hover table-condensed">
+              <table class="table table-hover table-condensed">
                 {sd.toHtml}
               </table>
               <div class="form-group">
@@ -182,7 +182,7 @@ class ServerCrud {
   }
   def add(xhtml: NodeSeq): NodeSeq = {
     bind("server", xhtml,
-      "form" -> <table class="table table-border table-hover table-condensed">
+      "form" -> <table class="table table-hover table-condensed">
                   {ServerData.create.toForm(Empty, "/index")}
                 </table>,
       "submit" -> {SHtml.submit(S.?("add"), () => (), "class" -> "btn btn-primary")}
