@@ -36,8 +36,7 @@
           <a class="navbar-brand" href="/index">ServerList</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-<!--          <span data-lift="lift:Menu.builder?linkToSelf=true;li_item:class=active;ul:class=nav+navbar-nav"></span> -->
-          <form class="lift:ServerCrud.keywordSearchForm?form=POST;class=navbar-form+navbar-left;">
+          <form class="lift:ServerCrud.keywordSearchForm?form=GET;class=navbar-form+navbar-left;">
             <div class="form-group">
               <searchform:service />
             </div>
@@ -51,7 +50,6 @@
           </form>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#" data-toggle="modal" data-target=".sd-add"><span class="glyphicon glyphicon-plus" /></a></li>
-<!--             <li><a href="#" data-toggle="modal" data-target=".config"><span class="glyphicon glyphicon-cog" /></a></li> -->
             <li><a href="/config"><span class="glyphicon glyphicon-cog" /></a></li>
           </ul>
 
@@ -77,20 +75,22 @@
     <div class="modal fade sd-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <div class="lift:ServerCrud.add?form=POST">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="myModalLabel"><span class="lift:Loc.add" /></h4>
-            </div>
-            <div class="modal-body">
-              <table class="table table-hover table-condensed">
-                  <server:form />
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal"><span class="lift:loc.close" /></button>
-              <server:submit />
-            </div>
+          <div class="lift:ServerCrud.add">
+            <form method="post" action="#" role="form">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><span class="lift:Loc.add" /></h4>
+              </div>
+              <div class="modal-body">
+                <table class="table table-hover table-condensed">
+                    <server:form />
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="lift:loc.close" /></button>
+                <server:submit />
+              </div>
+            </form>
           </div>
         </div>
       </div>

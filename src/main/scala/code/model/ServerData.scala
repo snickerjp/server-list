@@ -71,10 +71,12 @@ class ServerData extends LongKeyedMapper[ServerData] {
   object runningFlg extends MappedInt(this) {
     override def displayName = S.?("runningflg")
     lazy val flgList = List(
+      (5, S.?("building"),    "label label-primary"),
       (1, S.?("running"),     "label label-success"),
-      (2, S.?("stop"),        "label label-default"),
       (3, S.?("hotstandby"),  "label label-warning"),
-      (4, S.?("coldstandby"), "label label-info")
+      (4, S.?("coldstandby"), "label label-info"),
+      (6, S.?("serviceout"),  "label label-warning"),
+      (2, S.?("stop"),        "label label-default")
     )
     override def _toForm = {
       Full(

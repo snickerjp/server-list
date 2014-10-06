@@ -115,14 +115,14 @@ class ServerCrud {
     <div class={"modal fade sd-edit" + sd.id.get} tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <form method="post" action="/index">
+          <form method="post" action="#">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
               <h4 class="modal-title">{sd.hostName.get}</h4>
             </div>
             <div class="modal-body">
               <table class="table table-hover table-condensed">
-                {sd.toForm(Empty, "/index")}
+                {sd.toForm(Empty, "#")}
               </table>
             </div>
             <div class="modal-footer">
@@ -144,7 +144,7 @@ class ServerCrud {
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">{sd.hostName.get}</h4>
           </div>
-          <form method="post" action="/index" role="form">
+          <form method="post" action="#" role="form">
             <div class="modal-body">
               <table class="table table-hover table-condensed">
                 {sd.toHtml}
@@ -169,21 +169,21 @@ class ServerCrud {
       case Nil => {
         server.save
         S.notice(<span>{S.?("savecompleted")}</span>)
-        S.redirectTo("/index", () => ())
+        S.redirectTo("#", () => ())
       }
-      case x => S.error(x); S.redirectTo("/index", () => ())
+      case x => S.error(x); S.redirectTo("#", () => ())
     }
   }
   def deleteServerData(sd: ServerData) : NodeSeq = {
     S.param("hostName") match {
-      case Full(host) if host == sd.hostName.get => sd.delete_!; S.redirectTo("/index", () => ())
-      case _ => S.warning(<span>{S.?("unmatched")}</span>); S.redirectTo("/index", () => ())
+      case Full(host) if host == sd.hostName.get => sd.delete_!; S.redirectTo("#", () => ())
+      case _ => S.warning(<span>{S.?("unmatched")}</span>); S.redirectTo("#", () => ())
     }
   }
   def add(xhtml: NodeSeq): NodeSeq = {
     bind("server", xhtml,
       "form" -> <table class="table table-hover table-condensed">
-                  {ServerData.create.toForm(Empty, "/index")}
+                  {ServerData.create.toForm(Empty, "#")}
                 </table>,
       "submit" -> {SHtml.submit(S.?("add"), () => (), "class" -> "btn btn-primary")}
     )

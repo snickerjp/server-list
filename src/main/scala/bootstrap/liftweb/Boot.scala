@@ -12,6 +12,7 @@ import Loc._
 import mapper._
 
 import code.model._
+import code.rest._
 import net.liftmodules.JQueryModule
 
 
@@ -52,6 +53,10 @@ class Boot {
     )
 
     LiftRules.setSiteMapFunc(() => sitemap)
+
+    // csv download 用の RestHelper
+    LiftRules.dispatch.append(FileDownloadRest)
+
 
     //Init the jQuery module, see http://liftweb.net/jquery for more information.
     LiftRules.jsArtifacts = JQueryArtifacts
