@@ -12,9 +12,8 @@ import Loc._
 import mapper._
 
 import code.model._
-import code.rest._
 import net.liftmodules.JQueryModule
-
+import code.api.core.BootRest
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -54,10 +53,6 @@ class Boot {
 
     LiftRules.setSiteMapFunc(() => sitemap)
 
-    // csv download 用の RestHelper
-    LiftRules.dispatch.append(FileDownloadRest)
-
-
     //Init the jQuery module, see http://liftweb.net/jquery for more information.
     LiftRules.jsArtifacts = JQueryArtifacts
     JQueryModule.InitParam.JQuery=JQueryModule.JQuery191
@@ -87,6 +82,10 @@ class Boot {
     // Use HTML5 for rendering
     LiftRules.htmlProperties.default.set((r: Req) =>
       new Html5Properties(r.userAgent))
+
+    // Lift で Json を扱う設定
+    LiftRules.dispatch.append(BootRest) // stateful -- associated with a servlet container session
+    LiftRules.statelessDispatchTable.append(BootRest) // stateless -- no session created
 
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)
