@@ -34,6 +34,7 @@ cd server-list
 
 ### /v1/GetServerData/api.json
 * サーバ一覧を取得するAPIです。
+
 #### Request
 |パラメータ名|必須|説明|
 |---|---|---|
