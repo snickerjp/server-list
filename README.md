@@ -58,7 +58,7 @@ cd server-list
 |description|備考|
 |tags|タグ|
 
-### /v1/UpdateServerData/update.json
+### /v1/UpdateServerData/api.json
 * サーバ情報を更新するAPIです。
 * ホスト名とIPアドレスをキーに、渡されたパラメータのみ更新します。（ホスト名とIPアドレスは更新できません）
 * 該当するサーバが複数ある場合にはエラーとなります。
